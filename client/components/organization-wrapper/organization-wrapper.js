@@ -28,6 +28,7 @@ import {
   MobilePhoneVerification,
   PaymentStatus,
   PaymentBuffer,
+  PaymentProcess,
   ConnectedDoesNotExist,
   DoesNotExist,
 } from "./lazy-import";
@@ -275,6 +276,14 @@ export default class OrganizationWrapper extends React.Component {
                         );
                       return <Redirect to={`/${orgSlug}/login`} />;
                     }}
+                  />
+                  <Route
+                    path={`${match.path}/payment/process/`}
+                    render={() => (
+                      <Suspense fallback={<Loader />}>
+                        <PaymentProcess cookies={cookies} />
+                      </Suspense>
+                    )}
                   />
                   <Route
                     path={`${match.path}/payment/check/`}

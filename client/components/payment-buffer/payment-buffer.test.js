@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import {loadingContextValue} from "../../utils/loading-context";
 import PaymentBuffer from "./payment-buffer";
 import tick from "../../utils/tick";
-import getPaymentStatus from "../../utils/get-payment-status";
+import getPaymentStatusRedirectUrl from "../../utils/get-payment-status";
 import loadTranslation from "../../utils/load-translation";
 
 jest.mock("axios");
@@ -119,7 +119,7 @@ describe("Test <PaymentBuffer /> query_param present", () => {
     PaymentBuffer.contextTypes = {
       setLoading: PropTypes.func,
     };
-    getPaymentStatus.mockClear();
+    getPaymentStatusRedirectUrl.mockClear();
     console.log = jest.fn();
     console.error = jest.fn();
     loadTranslation("en", "default");
@@ -134,7 +134,7 @@ describe("Test <PaymentBuffer /> query_param present", () => {
 
   it("should redirect authenticated user payment status", async () => {
     props = createTestProps({isAuthenticated: true});
-    getPaymentStatus.mockReturnValue("success");
+    getPaymentStatusRedirectUrl.mockReturnValue("success");
     wrapper = shallow(<PaymentBuffer {...props} />, {
       context: loadingContextValue,
     });
@@ -144,7 +144,7 @@ describe("Test <PaymentBuffer /> query_param present", () => {
       "/default/payment/success",
     );
 
-    getPaymentStatus.mockReturnValue("failed");
+    getPaymentStatusRedirectUrl.mockReturnValue("failed");
     wrapper = shallow(<PaymentBuffer {...props} />, {
       context: loadingContextValue,
     });
@@ -154,7 +154,7 @@ describe("Test <PaymentBuffer /> query_param present", () => {
       "/default/payment/failed",
     );
 
-    getPaymentStatus.mockReturnValue("waiting");
+    getPaymentStatusRedirectUrl.mockReturnValue("waiting");
     wrapper = shallow(<PaymentBuffer {...props} />, {
       context: loadingContextValue,
     });
@@ -167,21 +167,21 @@ describe("Test <PaymentBuffer /> query_param present", () => {
 
   it("should show payment status to unauthenticated user", async () => {
     props = createTestProps();
-    getPaymentStatus.mockReturnValue("success");
+    getPaymentStatusRedirectUrl.mockReturnValue("success");
     wrapper = shallow(<PaymentBuffer {...props} />, {
       context: loadingContextValue,
     });
     await tick();
     expect(wrapper).toMatchSnapshot();
 
-    getPaymentStatus.mockReturnValue("failed");
+    getPaymentStatusRedirectUrl.mockReturnValue("failed");
     wrapper = shallow(<PaymentBuffer {...props} />, {
       context: loadingContextValue,
     });
     await tick();
     expect(wrapper).toMatchSnapshot();
 
-    getPaymentStatus.mockReturnValue("waiting");
+    getPaymentStatusRedirectUrl.mockReturnValue("waiting");
     wrapper = shallow(<PaymentBuffer {...props} />, {
       context: loadingContextValue,
     });

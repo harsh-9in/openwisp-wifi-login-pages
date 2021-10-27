@@ -5,7 +5,7 @@ import React from "react";
 import {Link, Redirect} from "react-router-dom";
 // import {t} from "ttag";
 import LoadingContext from "../../utils/loading-context";
-import getPaymentStatus from "../../utils/get-payment-status";
+import getPaymentStatusRedirectUrl from "../../utils/get-payment-status";
 
 export default class PaymentBuffer extends React.Component {
   constructor(props) {
@@ -32,10 +32,13 @@ export default class PaymentBuffer extends React.Component {
       }
     } else {
       // Use oneTimeToken to get payment status
-      const paymentStatus = await getPaymentStatus(
+      const paymentStatus = await getPaymentStatusRedirectUrl(
         orgSlug,
         paymentId,
-        oneTimeToken,
+        {
+          tokenType: settings.oneTimeTokenName,
+          tokenValue: oneTimeToken,
+        },
       );
       if (isAuthenticated && paymentStatus) {
         switch (paymentStatus) {
